@@ -1,14 +1,7 @@
-//
-//  ViewController.swift
-//  Plot
-//
-//  Created by ESB17955 on 2023/3/9.
-//
-
 import UIKit
 import CorePlot
 
-class ViewController: UIViewController {
+class PieChartViewController: UIViewController {
     
     private lazy var hostView: CPTGraphHostingView = {
         let view = CPTGraphHostingView()
@@ -131,7 +124,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: CPTPieChartDataSource, CPTPieChartDelegate {
+extension PieChartViewController: CPTPieChartDataSource, CPTPieChartDelegate {
     
     func numberOfRecords(for plot: CPTPlot) -> UInt {
         return UInt(rates.count)
