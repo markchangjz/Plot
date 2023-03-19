@@ -14,6 +14,7 @@ class BarPlotViewController : UIViewController {
     private var barPlot2: CPTBarPlot!
     private var averageLinePlot: CPTScatterPlot!
     private var steps = [16800, 1524, 1305, 3015, 1002, 1200, 1000]
+    private var stepAnnotation: CPTPlotSpaceAnnotation?
     
     private var yAxisMaxValue: Int {
         ((steps.max()! / 4) / 50 + 1) * 50 * 4
@@ -211,6 +212,7 @@ class BarPlotViewController : UIViewController {
         barPlot1.barCornerRadius = 2.0 // 圓角
         barPlot1.baseValue  = 0.0
         barPlot1.dataSource = self
+        barPlot1.delegate = self
         barPlot1.barOffset  = 1 // 調整偏移值
         barPlot1.barWidth = 0.3 // 寬度
         barPlot1.identifier = "Bar Plot 1" as NSString
@@ -261,6 +263,7 @@ class BarPlotViewController : UIViewController {
 
     // MARK: IBAction
     @IBAction func loadData(_ sender: UIBarButtonItem) {
+        stepAnnotation?.annotationHostLayer?.removeAllAnnotations()
         // 更新資料
 //        let oldYRange = CPTPlotRange(location:0, length:self.steps.max()! as NSNumber)
         
@@ -330,6 +333,21 @@ extension BarPlotViewController: CPTBarPlotDataSource {
                 return Double(idx) as NSNumber
                 
             case .barTip:
+                // 顯示 value
+//                stepAnnotation = CPTPlotSpaceAnnotation(plotSpace: plot.plotSpace!, anchorPlotPoint: [0, 0])
+//                let style = CPTMutableTextStyle()
+//                style.fontSize = 12.0
+//                style.fontName = "HelveticaNeue-Bold"
+//                let formatter = NumberFormatter()
+//                formatter.maximumFractionDigits = 2
+//                let step = steps[Int(idx)]
+//                let priceValue = formatter.string(from: NSNumber(integerLiteral: step))
+//                let textLayer = CPTTextLayer(text: priceValue, style: style)
+//                stepAnnotation?.contentLayer = textLayer
+//                stepAnnotation!.anchorPlotPoint = [NSNumber(integerLiteral: Int(idx + 1)), NSNumber(integerLiteral: step + 200)]
+//                let plotArea = plot.graph?.plotAreaFrame?.plotArea
+//                plotArea!.addAnnotation(stepAnnotation)
+                
                 return steps[Int(idx)]
                 
             default:
@@ -349,5 +367,34 @@ extension BarPlotViewController: CPTBarPlotDataSource {
         }
         
         return nil
+    }
+}
+
+// MARK: CPTBarPlotDelegate
+extension BarPlotViewController: CPTBarPlotDelegate {
+    
+    func barPlot(_ plot: CPTBarPlot, barWasSelectedAtRecord idx: UInt, with event: UIEvent) {
+        print("selected at idx = \(idx), value = \(steps[Int(idx)])")
+        
+        guard let step = number(for: plot, field: UInt(CPTBarPlotField.barTip.rawValue), record: idx) as? Int else {
+            return
+        }
+        
+        stepAnnotation?.annotationHostLayer?.removeAnnotation(stepAnnotation)
+        stepAnnotation = CPTPlotSpaceAnnotation(plotSpace: plot.plotSpace!, anchorPlotPoint: [0, 0])
+        
+        let style = CPTMutableTextStyle()
+        style.fontSize = 22.0
+        style.fontName = "HelveticaNeue-Bold"
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 2
+        let priceValue = formatter.string(from: NSNumber(integerLiteral: step))
+        let textLayer = CPTTextLayer(text: priceValue, style: style)
+        stepAnnotation?.contentLayer = textLayer
+        
+        stepAnnotation!.anchorPlotPoint = [NSNumber(integerLiteral: Int(idx + 1)), NSNumber(integerLiteral: step + 300)]
+        
+        guard let plotArea = plot.graph?.plotAreaFrame?.plotArea else { return }
+        plotArea.addAnnotation(stepAnnotation)
     }
 }
