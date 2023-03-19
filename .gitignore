@@ -28,3 +28,4 @@ xcuserdata/
 
 # End of https://www.toptal.com/developers/gitignore/api/xcode,cocoapods
 contents.xcworkspacedata
+IDEWorkspaceChecks.plist
