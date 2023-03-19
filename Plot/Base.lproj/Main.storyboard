@@ -73,7 +73,13 @@
                         <viewLayoutGuide key="safeArea" id="q5L-PV-zoy"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Bar Plot" id="0rV-KE-ve7"/>
+                    <navigationItem key="navigationItem" title="Bar Plot" id="0rV-KE-ve7">
+                        <barButtonItem key="rightBarButtonItem" title="Update" id="vFd-ir-ZB4">
+                            <connections>
+                                <action selector="loadData:" destination="h7G-bH-ecq" id="b9g-qR-EVs"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Is4-m7-J18" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

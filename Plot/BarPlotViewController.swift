@@ -14,6 +14,10 @@ class BarPlotViewController : UIViewController {
     private var barPlot2: CPTBarPlot!
     private var steps = [16800, 1524, 1305, 3015, 1002, 1200, 1000]
     
+    private var yAxisMaxValue: Int {
+        ((steps.max()! / 4) / 50 + 1) * 50 * 4
+    }
+    
     // MARK: - Initialization
     
     override func viewDidLoad() {
@@ -24,47 +28,16 @@ class BarPlotViewController : UIViewController {
             hostView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             hostView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
-        
-        
-        // 更新資料
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-//            self.steps = self.steps.map { $0 / 2}
-//
-//
-//            let plotSpace = self.hostView.hostedGraph?.defaultPlotSpace as! CPTXYPlotSpace
-//            let maxValue = self.steps.max()! + 100
-//            plotSpace.yRange = CPTPlotRange(location:0, length:maxValue as NSNumber)
-//            plotSpace.xRange = CPTPlotRange(location:0.5, length:7) // 從 0.5 開始，可用來調整 X 起始值
-//
-//
-//            let temp = self.hostView.hostedGraph?.allPlots()
-//
-//            temp?.forEach {
-//                self.hostView.hostedGraph?.remove($0)
-//            }
-//
-//
-//            temp?.forEach{
-//                self.hostView.hostedGraph?.add($0)
-//
-//            }
-//        }
-        
     }
 
-    override func viewDidAppear(_ animated : Bool)
-    {
+    override func viewDidAppear(_ animated : Bool) {
         super.viewDidAppear(animated)
 
         // Create graph from theme
         let newGraph = CPTXYGraph(frame: hostView.bounds)
-        
-        
 //        newGraph.apply(CPTTheme(named: .plainWhiteTheme))
-        
 //        newGraph.fill = CPTFill(color: CPTColor.gray()) // 設定背景色
         
-
         let hostingView = self.hostView
         hostingView.hostedGraph = newGraph
         
@@ -118,8 +91,7 @@ class BarPlotViewController : UIViewController {
         // Plot space
         // 設定顯示資料範圍
         let plotSpace = newGraph.defaultPlotSpace as! CPTXYPlotSpace
-        let maxValue = ((steps.max()! / 100) + 1) * 100
-        plotSpace.yRange = CPTPlotRange(location:0, length:maxValue as NSNumber)
+        plotSpace.yRange = CPTPlotRange(location:0, length:yAxisMaxValue as NSNumber)
         plotSpace.xRange = CPTPlotRange(location:0.5, length:7) // 從 0.5 開始，可用來調整 X 起始值
 
         let axisSet = newGraph.axisSet as! CPTXYAxisSet
@@ -195,8 +167,9 @@ class BarPlotViewController : UIViewController {
             let formatter = NumberFormatter()
             formatter.locale = Locale(identifier: "en_US")
             formatter.numberStyle = .decimal
+            formatter.maximumFractionDigits = 0 // 不顯示小數點
+            formatter.roundingMode = .halfUp
             y.labelFormatter = formatter
-            
             
             
 //            y.axisLineStyle       = nil
@@ -210,7 +183,7 @@ class BarPlotViewController : UIViewController {
             
             let minorGridLineStyle = CPTMutableLineStyle()
             minorGridLineStyle.lineColor = .lightGray()
-            minorGridLineStyle.lineWidth = 0.5
+            minorGridLineStyle.lineWidth = 0.1
             minorGridLineStyle.dashPattern = [5, 1]
             y.minorGridLineStyle = minorGridLineStyle
             
@@ -225,11 +198,7 @@ class BarPlotViewController : UIViewController {
             y.axisTitle = CPTAxisTitle(text: "步數", textStyle: CPTTextStyle())
 //            y.titleLocation = 4200
             
-            
             y.axisConstraints = CPTConstraints(lowerOffset: 0)
-            
-            
-        
         }
 
         // First bar plot
@@ -282,6 +251,21 @@ class BarPlotViewController : UIViewController {
         self.barGraph = newGraph
     }
 
+    // MARK: IBAction
+    @IBAction func loadData(_ sender: UIBarButtonItem) {
+        // 更新資料
+//        let oldYRange = CPTPlotRange(location:0, length:self.steps.max()! as NSNumber)
+        
+        self.steps = (1...7).map { _ in Int.random(in: 1000...20000) }
+        let newYRange = CPTPlotRange(location:0, length:yAxisMaxValue as NSNumber)
+                
+        if let graph = self.hostView.hostedGraph {
+            let plotSpace = graph.defaultPlotSpace as! CPTXYPlotSpace
+            plotSpace.yRange = newYRange // 更新 Y 軸範圍
+//            CPTAnimation.animate(plotSpace, property: "yRange", from: oldYRange, to: newYRange, duration: 0.0) // 動畫
+            graph.reloadData()
+        }
+    }
     
 }
 
@@ -296,7 +280,8 @@ extension BarPlotViewController: CPTBarPlotDataSource {
         if plot.identifier as! String == "horizontalLineForAverage" {
 
             if CPTScatterPlotField(rawValue: Int(fieldEnum)) == CPTScatterPlotField.Y {
-                return 4000 //* idx as NSNumber
+                let average = Double(steps.reduce(0, +)) / Double(steps.count)
+                return average
             } else {
                 return Double(idx) * 1.5
             }
