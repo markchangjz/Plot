@@ -34,25 +34,25 @@ class BarPlotViewController : UIViewController {
         super.viewDidAppear(animated)
 
         // Create graph from theme
-        let newGraph = CPTXYGraph(frame: hostView.bounds)
-//        newGraph.apply(CPTTheme(named: .plainWhiteTheme))
-//        newGraph.fill = CPTFill(color: CPTColor.gray()) // 設定背景色
+        let graph = CPTXYGraph(frame: hostView.bounds)
+//        graph.apply(CPTTheme(named: .plainWhiteTheme))
+//        graph.fill = CPTFill(color: CPTColor.gray()) // 設定背景色
         
         let hostingView = self.hostView
-        hostingView.hostedGraph = newGraph
+        hostingView.hostedGraph = graph
         
 
-        if let frameLayer = newGraph.plotAreaFrame {
+        if let frameLayer = graph.plotAreaFrame {
             // Border
             frameLayer.borderLineStyle = nil
             frameLayer.cornerRadius    = 0.0
             frameLayer.masksToBorder   = false
 
             // Paddings
-            newGraph.paddingLeft   = 0.0
-            newGraph.paddingRight  = 0.0
-            newGraph.paddingTop    = 0.0
-            newGraph.paddingBottom = 0.0
+            graph.paddingLeft   = 0.0
+            graph.paddingRight  = 0.0
+            graph.paddingTop    = 0.0
+            graph.paddingBottom = 0.0
 
             frameLayer.paddingLeft   = 70.0
             frameLayer.paddingTop    = 20.0
@@ -82,19 +82,19 @@ class BarPlotViewController : UIViewController {
         graphTitle.addAttribute(.font, value:line1Font!, range:titleRange1)
         graphTitle.addAttribute(.font, value:line2Font!, range:titleRange2)
 
-//        newGraph.attributedTitle = graphTitle
+//        graph.attributedTitle = graphTitle
 
-        newGraph.titleDisplacement        = CGPoint(x: 0.0, y:20.0)
-        newGraph.titlePlotAreaFrameAnchor = .top
+        graph.titleDisplacement        = CGPoint(x: 0.0, y:20.0)
+        graph.titlePlotAreaFrameAnchor = .top
         
 
         // Plot space
         // 設定顯示資料範圍
-        let plotSpace = newGraph.defaultPlotSpace as! CPTXYPlotSpace
+        let plotSpace = graph.defaultPlotSpace as! CPTXYPlotSpace
         plotSpace.yRange = CPTPlotRange(location:0, length:yAxisMaxValue as NSNumber)
         plotSpace.xRange = CPTPlotRange(location:0.5, length:7) // 從 0.5 開始，可用來調整 X 起始值
 
-        let axisSet = newGraph.axisSet as! CPTXYAxisSet
+        let axisSet = graph.axisSet as! CPTXYAxisSet
 
         if let x = axisSet.xAxis {
             x.labelingPolicy = .none
@@ -219,7 +219,7 @@ class BarPlotViewController : UIViewController {
         style.lineWidth = 1
         style.lineWidth = 0.0 // 移除 bar 的 border 顏色
         barPlot1.lineStyle = style
-        newGraph.add(barPlot1, to:plotSpace)
+        graph.add(barPlot1, to:plotSpace)
         
         
 
@@ -231,7 +231,7 @@ class BarPlotViewController : UIViewController {
 //        barPlot2.barCornerRadius = 2.0
 //        barPlot2.barWidth = 0.3
 //        barPlot2.identifier      = "Bar Plot 2" as NSString
-//        newGraph.add(barPlot2, to:plotSpace)
+//        graph.add(barPlot2, to:plotSpace)
         
           
         // 平均線
@@ -245,10 +245,10 @@ class BarPlotViewController : UIViewController {
         dataSourceLinePlot.dataSource = self
         dataSourceLinePlot.interpolation = .linear
         dataSourceLinePlot.plotSymbol = nil
-        newGraph.add(dataSourceLinePlot, to: plotSpace)
+        graph.add(dataSourceLinePlot, to: plotSpace)
         
 
-        self.barGraph = newGraph
+        self.barGraph = graph
     }
 
     // MARK: IBAction
