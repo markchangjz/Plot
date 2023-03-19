@@ -44,9 +44,12 @@ class BarPlotViewController : UIViewController {
 
         if let frameLayer = graph.plotAreaFrame {
             // Border
-            frameLayer.borderLineStyle = nil
-            frameLayer.cornerRadius    = 0.0
-            frameLayer.masksToBorder   = false
+            let axisLineStyle = CPTMutableLineStyle()
+            axisLineStyle.lineWidth = 1.0
+            axisLineStyle.lineColor = CPTColor.blue()
+            frameLayer.borderLineStyle = axisLineStyle
+            frameLayer.cornerRadius = 0.1
+//            frameLayer.masksToBorder = false
 
             // Paddings
             graph.paddingLeft   = 0.0
@@ -54,11 +57,10 @@ class BarPlotViewController : UIViewController {
             graph.paddingTop    = 0.0
             graph.paddingBottom = 0.0
 
-            frameLayer.paddingLeft   = 70.0
-            frameLayer.paddingTop    = 20.0
+            frameLayer.paddingLeft   = 50.0
+            frameLayer.paddingTop    = 30.0
             frameLayer.paddingRight  = 20.0
-            frameLayer.paddingBottom = 80.0
-            
+            frameLayer.paddingBottom = 25.0
         }
 
         // Graph title
@@ -121,8 +123,8 @@ class BarPlotViewController : UIViewController {
 //            x.majorTickLineStyle  = nil // 移除標記
 //            x.minorTickLineStyle  = nil
 //            x.majorIntervalLength = 5.0
-            x.orthogonalPosition  = 0.0
-            x.title               = "X Axis"
+//            x.orthogonalPosition  = 0.0
+//            x.title               = "X Axis"
 //            x.titleLocation       = 7.5
 //            x.titleOffset         = 15.0
 //
@@ -170,6 +172,7 @@ class BarPlotViewController : UIViewController {
             formatter.maximumFractionDigits = 0 // 不顯示小數點
             formatter.roundingMode = .halfUp
             y.labelFormatter = formatter
+            y.labelOffset = 3.0
             
             
 //            y.axisLineStyle       = nil
@@ -188,17 +191,17 @@ class BarPlotViewController : UIViewController {
             y.minorGridLineStyle = minorGridLineStyle
             
 //            y.orthogonalPosition  = 0.0
-//            y.title               = "步數"
-            y.titleOffset         = 0.0
-//            y.titleLocation       = 0
-//            y.titleDirection = .positive
-//            y.titleRotation = 0
-
-            
-            y.axisTitle = CPTAxisTitle(text: "步數", textStyle: CPTTextStyle())
-//            y.titleLocation = 4200
+            y.title = "Steps"
+            y.titleOffset = 3.0
+            y.titleRotation = 0
             
             y.axisConstraints = CPTConstraints(lowerOffset: 0)
+
+            
+//            y.axisTitle = CPTAxisTitle(text: "Steps", textStyle: CPTTextStyle())
+//            y.titleLocation = yAxisMaxValue as NSNumber
+            
+            
         }
 
         // First bar plot
@@ -247,8 +250,12 @@ class BarPlotViewController : UIViewController {
         dataSourceLinePlot.plotSymbol = nil
         graph.add(dataSourceLinePlot, to: plotSpace)
         
-
+//        plotSpace.scale(toFit: [barPlot1, barPlot2])
         self.barGraph = graph
+        
+        OperationQueue.main.addOperation {
+            self.adjustYAxisTitleLocation()
+        }
     }
 
     // MARK: IBAction
@@ -263,10 +270,34 @@ class BarPlotViewController : UIViewController {
             let plotSpace = graph.defaultPlotSpace as! CPTXYPlotSpace
             plotSpace.yRange = newYRange // 更新 Y 軸範圍
 //            CPTAnimation.animate(plotSpace, property: "yRange", from: oldYRange, to: newYRange, duration: 0.0) // 動畫
+                        
+            adjustYAxisTitleLocation()
+            
             graph.reloadData()
         }
     }
     
+}
+
+// MARK: Private function
+extension BarPlotViewController {
+    
+    private func adjustYAxisTitleLocation() {
+        // 設定 Y 軸 title 在最上方
+        // https://stackoverflow.com/questions/11914613/core-plot-how-to-position-the-axis-title-for-two-y-axes-at-the-same-height
+        
+        if let graph = self.hostView.hostedGraph {
+            let plotSpace = graph.defaultPlotSpace as! CPTXYPlotSpace
+            let axisSet = graph.axisSet as! CPTXYAxisSet
+            if let y = axisSet.yAxis {
+                let plotAreaBounds = graph.plotAreaFrame!.plotArea!.bounds
+                let viewPoint = CGPoint(x: CGRectGetMinX(plotAreaBounds), y: CGRectGetMaxY(plotAreaBounds) + 15.0)
+                
+                let plotPoints = plotSpace.plotPoint(forPlotAreaViewPoint: viewPoint)
+                y.titleLocation = plotPoints![CPTCoordinate.Y.rawValue]
+            }
+        }
+    }
 }
 
 // MARK: CPTBarPlotDataSource
