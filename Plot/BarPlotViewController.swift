@@ -12,6 +12,7 @@ class BarPlotViewController : UIViewController {
     private var barGraph : CPTXYGraph? = nil
     private var barPlot1: CPTBarPlot!
     private var barPlot2: CPTBarPlot!
+    private var averageLinePlot: CPTScatterPlot!
     private var steps = [16800, 1524, 1305, 3015, 1002, 1200, 1000]
     
     private var yAxisMaxValue: Int {
@@ -238,17 +239,17 @@ class BarPlotViewController : UIViewController {
         
           
         // 平均線
-        let dataSourceLinePlot = CPTScatterPlot()
+        averageLinePlot = CPTScatterPlot()
         let lineStyle = CPTMutableLineStyle()
         lineStyle.lineWidth = 1
         lineStyle.lineColor = CPTColor.red()
         lineStyle.dashPattern = [5, 1]
-        dataSourceLinePlot.dataLineStyle = lineStyle
-        dataSourceLinePlot.identifier = "horizontalLineForAverage" as NSString
-        dataSourceLinePlot.dataSource = self
-        dataSourceLinePlot.interpolation = .linear
-        dataSourceLinePlot.plotSymbol = nil
-        graph.add(dataSourceLinePlot, to: plotSpace)
+        averageLinePlot.dataLineStyle = lineStyle
+//        averageLinePlot.identifier = "horizontalLineForAverage" as NSString
+        averageLinePlot.dataSource = self
+        averageLinePlot.interpolation = .linear
+        averageLinePlot.plotSymbol = nil
+        graph.add(averageLinePlot, to: plotSpace)
         
 //        plotSpace.scale(toFit: [barPlot1, barPlot2])
         self.barGraph = graph
@@ -304,17 +305,23 @@ extension BarPlotViewController {
 extension BarPlotViewController: CPTBarPlotDataSource {
     
     func numberOfRecords(for plot: CPTPlot) -> UInt {
-        return 7
+        if plot == averageLinePlot {
+            return 2
+        } else if plot == barPlot1 {
+            return 7
+        } else {
+            return 0
+        }
     }
     
     func number(for plot: CPTPlot, field fieldEnum: UInt, record idx: UInt) -> Any? {
-        if plot.identifier as! String == "horizontalLineForAverage" {
+        if plot == averageLinePlot {
 
             if CPTScatterPlotField(rawValue: Int(fieldEnum)) == CPTScatterPlotField.Y {
                 let average = Double(steps.reduce(0, +)) / Double(steps.count)
                 return average
             } else {
-                return Double(idx) * 1.5
+                return Double(idx) * Double(steps.count) + 0.5
             }
 
         } else if plot == barPlot1 {
