@@ -50,19 +50,57 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="eWV-jc-HZ4" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="N6Z-i5-9Ut">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="gio-59-2NP" kind="relationship" relationship="viewControllers" id="PhN-Uy-VcT"/>
+                        <segue destination="AEo-Gf-bKc" kind="relationship" relationship="viewControllers" id="nco-Rl-aeM"/>
+                        <segue destination="gio-59-2NP" kind="relationship" relationship="viewControllers" id="VtK-7D-v00"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aFK-QH-JgL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="130.53435114503816" y="3.5211267605633805"/>
+            <point key="canvasLocation" x="4" y="-413"/>
+        </scene>
+        <!--Bar Plot-->
+        <scene sceneID="6Zb-Cg-ddE">
+            <objects>
+                <viewController id="h7G-bH-ecq" customClass="BarPlotViewController" customModule="Plot" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="25B-Ae-GQo">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="q5L-PV-zoy"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Bar Plot" id="0rV-KE-ve7"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Is4-m7-J18" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1982" y="-804"/>
+        </scene>
+        <!--Bar Plot-->
+        <scene sceneID="8ZK-Xu-Mqt">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="AEo-Gf-bKc" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Bar Plot" image="chart.bar" catalog="system" id="H6e-sV-WTg"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="a8f-Rv-lHg">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="h7G-bH-ecq" kind="relationship" relationship="rootViewController" id="Odj-k6-EPn"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nci-vh-xqW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1056" y="-804"/>
         </scene>
     </scenes>
     <resources>
+        <image name="chart.bar" catalog="system" width="128" height="89"/>
         <image name="chart.pie" catalog="system" width="128" height="123"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

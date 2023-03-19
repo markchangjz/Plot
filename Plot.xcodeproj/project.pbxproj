@@ -13,6 +13,7 @@
 		642030FF29B9B2E0008DF524 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 642030FD29B9B2E0008DF524 /* Main.storyboard */; };
 		6420310129B9B2E2008DF524 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6420310029B9B2E2008DF524 /* Assets.xcassets */; };
 		6420310429B9B2E2008DF524 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6420310229B9B2E2008DF524 /* LaunchScreen.storyboard */; };
+		649396DF29C69CB7000B8B2B /* BarPlotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 649396DE29C69CB7000B8B2B /* BarPlotViewController.swift */; };
 		7CED2FECAE2F758148BB0713 /* Pods_Plot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6BB2D597014FBECFD077D78 /* Pods_Plot.framework */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +27,7 @@
 		6420310029B9B2E2008DF524 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6420310329B9B2E2008DF524 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6420310529B9B2E2008DF524 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		649396DE29C69CB7000B8B2B /* BarPlotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarPlotViewController.swift; sourceTree = "<group>"; };
 		77B4C4F31767367A9CCC1842 /* Pods-Plot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plot.release.xcconfig"; path = "Target Support Files/Pods-Plot/Pods-Plot.release.xcconfig"; sourceTree = "<group>"; };
 		B6BB2D597014FBECFD077D78 /* Pods_Plot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Plot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -65,6 +67,7 @@
 			children = (
 				642030F729B9B2E0008DF524 /* AppDelegate.swift */,
 				642030F929B9B2E0008DF524 /* SceneDelegate.swift */,
+				649396DE29C69CB7000B8B2B /* BarPlotViewController.swift */,
 				642030FB29B9B2E0008DF524 /* PieChartViewController.swift */,
 				642030FD29B9B2E0008DF524 /* Main.storyboard */,
 				6420310029B9B2E2008DF524 /* Assets.xcassets */,
@@ -207,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				642030FC29B9B2E0008DF524 /* PieChartViewController.swift in Sources */,
+				649396DF29C69CB7000B8B2B /* BarPlotViewController.swift in Sources */,
 				642030F829B9B2E0008DF524 /* AppDelegate.swift in Sources */,
 				642030FA29B9B2E0008DF524 /* SceneDelegate.swift in Sources */,
 			);
